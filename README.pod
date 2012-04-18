@@ -1,0 +1,53 @@
+=head1 NAME
+
+Jubako - Configurable Tiny Object Container
+
+=head1 SYNOPSIS
+
+  # your container class ( lib/MyApp/API.pm )
+  package MyApp::API;
+  use parent;
+  1;
+  
+  # some your API class ( lib/MyApp/API/LWP.pm )
+  package MyApp::API::LWP;
+  use parent qw( LWP::UserAgent );
+  1;
+  
+  # config file for your container ( config.pl )
+  {
+    default => {
+      'LWP' => {
+         timeout => 3,
+         agent => 'MyApp::API::LWP/0.01',
+      },
+    },
+    development => {
+      'LWP' => {
+         timeout => 30,
+         agent => 'MyApp::API::LWP(DEVELOPMENT)/0.01',
+      },
+    },
+  }
+  
+  # finally, you may do it.
+  use MyApp::API;
+  my $container = MyApp::API->new( env => 'development', config => do( 'config.pl' ) );
+  my $res = $container->LWP->get( $url );
+
+=head1 DESCRIPTION
+
+Jubako is an object container class.
+
+=head1 AUTHOR
+
+satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
+
+=head1 SEE ALSO
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
