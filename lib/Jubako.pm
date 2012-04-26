@@ -3,9 +3,10 @@ use strict;
 use warnings;
 use parent qw( Class::Accessor::Fast );
 use Class::Load qw( :all );
+use Config::Pit;
 use String::CamelCase ();
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $AUTOLOAD;
 
 __PACKAGE__->mk_accessors( qw( config objects prefix env ) );
@@ -14,15 +15,14 @@ sub new {
     my ( $class, %args ) = @_;
     $args{env} ||= 'default';
     $args{prefix} ||= $class;
-    $args{config} ||= {};
+    $args{config} = pit_get( $args{env} ) || {};
     $args{objects} = {};
     return $class->SUPER::new( \%args );
 }
 
 sub _get {
     my ( $self, $key ) = @_;
-    my $env = $self->env;
-    my $config = $self->config->{$env}->{$key} || $self->config->{default}->{$key};
+    my $config = $self->config->{$key} || {};
     my $klass = join '::', $self->prefix, $key;
     unless ( is_class_loaded( $klass ) ) {
         load_class( $klass );
@@ -46,35 +46,36 @@ Jubako - Configurable Tiny Object Container
 
 =head1 SYNOPSIS
 
+First, create your container class.
+
   # your container class ( lib/MyApp/API.pm )
   package MyApp::API;
-  use parent;
+  use parent( Jubako );
   1;
-  
+
+Then, create your API class.
+
   # some your API class ( lib/MyApp/API/LWP.pm )
   package MyApp::API::LWP;
   use parent qw( LWP::UserAgent );
   1;
-  
-  # config file for your container ( config.pl )
-  {
-    default => {
+
+Next step, configure API using Config::Pit.
+
+  # configure API using Config::Pit. 
+  use Config::Pit;
+  Config::Pit::set( "development", data => {
       'LWP' => {
          timeout => 3,
          agent => 'MyApp::API::LWP/0.01',
       },
-    },
-    development => {
-      'LWP' => {
-         timeout => 30,
-         agent => 'MyApp::API::LWP(DEVELOPMENT)/0.01',
-      },
-    },
-  }
+  } );
+  ### AND YOU HAVE TO RUN AVOBE SCRIPT!
+
+When using your container...
   
-  # finally, you may do it.
   use MyApp::API;
-  my $container = MyApp::API->new( env => 'development', config => do( 'config.pl' ) );
+  my $api = MyApp::API->new( 'development' );
   my $res = $container->LWP->get( $url );
 
 =head1 DESCRIPTION

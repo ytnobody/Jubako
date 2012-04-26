@@ -4,6 +4,7 @@ all_from 'lib/Jubako.pm';
 
 requires 'Class::Accessor::Fast';
 requires 'Class::Load';
+requires 'Config::Pit';
 requires 'String::CamelCase';
 
 tests 't/*.t';

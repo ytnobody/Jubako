@@ -4,35 +4,36 @@ Jubako - Configurable Tiny Object Container
 
 =head1 SYNOPSIS
 
+First, create your container class.
+
   # your container class ( lib/MyApp/API.pm )
   package MyApp::API;
-  use parent;
+  use parent( Jubako );
   1;
-  
+
+Then, create your API class.
+
   # some your API class ( lib/MyApp/API/LWP.pm )
   package MyApp::API::LWP;
   use parent qw( LWP::UserAgent );
   1;
-  
-  # config file for your container ( config.pl )
-  {
-    default => {
+
+Next step, configure API using Config::Pit.
+
+  # configure API using Config::Pit. 
+  use Config::Pit;
+  Config::Pit::set( "development", data => {
       'LWP' => {
          timeout => 3,
          agent => 'MyApp::API::LWP/0.01',
       },
-    },
-    development => {
-      'LWP' => {
-         timeout => 30,
-         agent => 'MyApp::API::LWP(DEVELOPMENT)/0.01',
-      },
-    },
-  }
+  } );
+  ### AND YOU HAVE TO RUN AVOBE SCRIPT!
+
+When using your container...
   
-  # finally, you may do it.
   use MyApp::API;
-  my $container = MyApp::API->new( env => 'development', config => do( 'config.pl' ) );
+  my $api = MyApp::API->new( 'development' );
   my $res = $container->LWP->get( $url );
 
 =head1 DESCRIPTION
