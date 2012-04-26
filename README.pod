@@ -8,7 +8,7 @@ First, create your container class.
 
   # your container class ( lib/MyApp/API.pm )
   package MyApp::API;
-  use parent( Jubako );
+  use parent qw( Jubako );
   1;
 
 Then, create your API class.
