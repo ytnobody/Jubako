@@ -6,7 +6,7 @@ Jubako - Configurable Tiny Object Container
 
   # your container class ( lib/MyApp/API.pm )
   package MyApp::API;
-  use parent;
+  use parent qw( Jubako );
   1;
   
   # some your API class ( lib/MyApp/API/LWP.pm )
