@@ -38,6 +38,11 @@ sub AUTOLOAD {
     return $self->_get( String::CamelCase::camelize( $key ) );
 }
 
+sub DESTROY {
+    my $self = shift;
+    undef $self;
+}
+
 1;
 __END__
 
