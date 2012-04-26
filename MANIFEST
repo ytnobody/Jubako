@@ -1,3 +1,4 @@
+.proverc
 Changes
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
@@ -19,6 +20,11 @@ MYMETA.json
 MYMETA.yml
 README
 t/00_compile.t
+t/10_default.t
+t/11_test_mode.t
+t/config.pl
+t/MyTest/API.pm
+t/MyTest/API/MyClass.pm
 xt/01_podspell.t
 xt/02_perlcritic.t
 xt/03_pod.t
