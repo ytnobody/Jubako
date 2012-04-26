@@ -5,7 +5,8 @@ use lib qw( t );
 use MyTest::API;
 
 my $config = do ( 't/config.pl' );
-Config::Pit::set( "test_mode", data => $config->{test_mode} );
+Config::Pit::switch( "test_mode" );
+Config::Pit::set( "MyTest::API", data => $config->{test_mode} );
 
 my $c = MyTest::API->new( 'test_mode' );
 
@@ -16,7 +17,7 @@ is_deeply $c->config, $config->{test_mode};
 is_deeply $config->{test_mode}->{MyClass}, { %{$c->my_class} };
 
 END {
-    Config::Pit::set( "test_mode", data => undef );
+    Config::Pit::set( "MyTest::API", data => undef );
 };
 
 done_testing;

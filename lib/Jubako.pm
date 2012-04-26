@@ -13,10 +13,12 @@ __PACKAGE__->mk_accessors( qw( config objects prefix env ) );
 
 sub new {
     my ( $class, $env ) = @_;
+    $env ||= 'default';
+    Config::Pit::switch( $env );
     my %args;
-    $args{env} = $env || 'default';
+    $args{env} = $env;
     $args{prefix} ||= $class;
-    $args{config} = pit_get( $args{env} ) || {};
+    $args{config} = pit_get( $class ) || {};
     $args{objects} = {};
     return $class->SUPER::new( \%args );
 }
@@ -70,7 +72,8 @@ Next step, configure API using Config::Pit.
 
   # configure API using Config::Pit. 
   use Config::Pit;
-  Config::Pit::set( "development", data => {
+  Config::Pit::switch( "development" );
+  Config::Pit::set( "MyApp::API", data => {
       'LWP' => {
          timeout => 3,
          agent => 'MyApp::API::LWP/0.01',

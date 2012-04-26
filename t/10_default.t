@@ -5,7 +5,8 @@ use lib qw( t );
 use MyTest::API;
 
 my $config = do ( 't/config.pl' );
-Config::Pit::set( "default", data => $config->{default} );
+Config::Pit::switch( "default" );
+Config::Pit::set( "MyTest::API", data => $config->{default} );
 
 my $c = MyTest::API->new;
 
@@ -17,7 +18,7 @@ is_deeply $c->config, $config->{default};
 is_deeply $config->{default}->{MyClass}, { %{$c->my_class} };
 
 END {
-    Config::Pit::set( "default", data => undef );
+    Config::Pit::set( "MyTest::API", data => undef );
 };
 
 done_testing;

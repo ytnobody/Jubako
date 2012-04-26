@@ -8,7 +8,7 @@ First, create your container class.
 
   # your container class ( lib/MyApp/API.pm )
   package MyApp::API;
-  use parent qw( Jubako );
+  use parent( Jubako );
   1;
 
 Then, create your API class.
@@ -22,7 +22,8 @@ Next step, configure API using Config::Pit.
 
   # configure API using Config::Pit. 
   use Config::Pit;
-  Config::Pit::set( "development", data => {
+  Config::Pit::switch( "development" );
+  Config::Pit::set( "MyApp::API", data => {
       'LWP' => {
          timeout => 3,
          agent => 'MyApp::API::LWP/0.01',
