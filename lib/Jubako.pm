@@ -12,8 +12,9 @@ our $AUTOLOAD;
 __PACKAGE__->mk_accessors( qw( config objects prefix env ) );
 
 sub new {
-    my ( $class, %args ) = @_;
-    $args{env} ||= 'default';
+    my ( $class, $env ) = @_;
+    my %args;
+    $args{env} = $env || 'default';
     $args{prefix} ||= $class;
     $args{config} = pit_get( $args{env} ) || {};
     $args{objects} = {};

@@ -7,7 +7,7 @@ use MyTest::API;
 my $config = do ( 't/config.pl' );
 Config::Pit::set( "test_mode", data => $config->{test_mode} );
 
-my $c = MyTest::API->new( env => 'test_mode' );
+my $c = MyTest::API->new( 'test_mode' );
 
 isa_ok $c, 'MyTest::API';
 isa_ok $c, 'Jubako';
